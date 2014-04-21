@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,14 +18,16 @@ public class BlockBlowerPlus
     public void onEnable()
     {
         getServer().getPluginManager().registerEvents( this, this );
-
+        getLogger().info( "Enabled!" );
     }
 
     public void onDisable()
     {
+        saveConfig();
+        getLogger().info( "Disabled!" );
     }
 
-    @EventHandler
+    @EventHandler( priority = EventPriority.LOWEST )
     public void onEntityExplode( EntityExplodeEvent event )
     {
         for ( Block b : event.blockList() )
@@ -33,7 +36,6 @@ public class BlockBlowerPlus
             float y = (float) -1 + (float) ( Math.random() * ( ( 1 - -1 ) + 1 ) );
             float z = (float) -0.2 + (float) ( Math.random() * ( ( 0.2 - -0.2 ) + 1 ) );
 
-            @SuppressWarnings( "deprecation" )
             FallingBlock fallingBlock = b.getWorld().spawnFallingBlock( b.getLocation(), b.getType(), b.getData() );
             fallingBlock.setDropItem( false );
             fallingBlock.setVelocity( new Vector( x, y, z ) );
